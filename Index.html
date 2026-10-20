@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swagat & Damini Wedding Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f9f0cb;
+            --gold-dark: #aa820a;
+            --marigold: #e58e26;
+            --rose: #b71540;
+            --bg-color: #fbf9f5;
+            --bg-card: #ffffff;
+            --text-dark: #222f3e;
+            --text-light: #636e72;
+            --royal-red: #800020;
+            --shadow-subtle: 0 10px 30px rgba(212, 175, 55, 0.08);
+            --shadow-card: 0 12px 35px rgba(0, 0, 0, 0.06), 0 2px 10px rgba(212, 175, 55, 0.07);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(229, 142, 38, 0.04) 0%, transparent 40%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            text-align: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 40px 20px 80px;
+        }
+
+        /* Background Rotating Royal Mandalas */
+        .mandala-bg {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.035;
+            animation: spinMandala 160s linear infinite;
+        }
+        .mandala-top-left {
+            top: -15vw;
+            left: -15vw;
+            width: 50vw;
+            height: 50vw;
+        }
+        .mandala-bottom-right {
+            bottom: -20vw;
+            right: -20vw;
+            width: 60vw;
+            height: 60vw;
+            animation-direction: reverse;
+            animation-duration: 200s;
+        }
+
+        @keyframes spinMandala {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Particle Overlay Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Floating Circular Audio Mute/Unmute Button */
+        .audio-float-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fdf8e2 0%, #ffffff 50%, #f7e7a9 100%);
+            border: 1.5px solid var(--gold);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14), 0 0 16px rgba(212, 175, 55, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .audio-float-btn:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18), 0 0 22px rgba(212, 175, 55, 0.55);
+            border-color: var(--gold-dark);
+        }
+        .audio-float-btn:active {
+            transform: scale(0.95);
+        }
+        .audio-float-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--gold-dark);
+            transition: transform 0.25s ease, fill 0.25s ease;
+        }
+        .audio-float-btn.playing svg {
+            fill: #9b7914;
+            animation: pulseSpeaker 2s infinite ease-in-out;
+        }
+        @keyframes pulseSpeaker {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        /* Container & Header Section */
+        .main-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .milestone-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 18px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(249, 240, 203, 0.4));
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 40px;
+            color: var(--gold-dark);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
+            animation: fadeInDown 0.8s ease-out;
+        }
+        .milestone-badge span.spark {
+            font-size: 0.9rem;
+            animation: pulseGlow 2.5s infinite ease-in-out;
+        }
+
+        .header-section {
+            margin-bottom: 35px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.6rem, 5.5vw, 4.8rem);
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            color: var(--text-dark);
+            letter-spacing: 1.5px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            column-gap: 14px;
+        }
+
+        .name-part {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .animated-char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(22px) scale(0.96);
+            filter: blur(4px);
+            animation: elegantLetterReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards, continuousGoldShine 7s ease-in-out infinite;
+            background: linear-gradient(
+                120deg,
+                #232b2b 0%,
+                #2c3e50 35%,
+                #d4af37 50%,
+                #f7e7a9 55%,
+                #d4af37 60%,
+                #2c3e50 75%,
+                #232b2b 100%
+            );
+            background-size: 260% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .ampersand {
+            color: var(--gold);
+            font-style: italic;
+            font-weight: 400;
+            display: inline-block;
+            padding: 0 6px;
+            opacity: 0;
+            animation: fadeInAmp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards, pulseGlow 3s infinite ease-in-out 1.8s;
+            -webkit-text-fill-color: initial;
+        }
+
+        .gold-ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin: 6px 0 14px;
+        }
+        .gold-line {
+            width: 50px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        .gold-diamond {
+            color: var(--gold);
+            font-size: 0.85rem;
+            animation: pulseGlow 2.5s infinite ease-in-out;
+        }
+
+        .subtitle {
+            font-size: clamp(0.78rem, 2vw, 1.05rem);
+            font-weight: 300;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--text-light);
+        }
+
+        /* Search & Filter Bar Controls */
+        .controls-wrapper {
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 42px;
+            border-radius: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.88rem;
+            color: var(--text-dark);
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+        .search-input:focus {
+            border-color: var(--gold);
+            background: #ffffff;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.25);
+        }
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            fill: var(--gold);
+            pointer-events: none;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            animation: fadeIn 1.2s ease-out;
+        }
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(127, 140, 141, 0.35);
+            padding: 10px 22px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            color: var(--text-dark);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            outline: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-btn .count-badge {
+            background: rgba(0, 0, 0, 0.05);
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            color: inherit;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+        }
+        .filter-btn.active {
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            border-color: var(--gold);
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+        .filter-btn.active .count-badge {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+
+        /* Cards Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 32px;
+            max-width: 1240px;
+            margin: 0 auto;
+            padding-bottom: 40px;
+            perspective: 1200px;
+        }
+
+        /* 3D Dynamic Card */
+        .card-wrapper {
+            perspective: 1000px;
+            opacity: 0;
+            animation: cardEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .card {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            background: var(--bg-card);
+            box-shadow: var(--shadow-card);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            aspect-ratio: 4/5;
+            cursor: pointer;
+            border: 1px solid rgba(212, 175, 55, 0.18);
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.4s ease;
+        }
+
+        /* Dynamic Golden Glare Reflection */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 18px;
+            background: radial-gradient(circle 280px at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.35), rgba(212, 175, 55, 0.15) 35%, transparent 70%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5;
+            transition: opacity 0.3s ease;
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 0 10px 30px rgba(212, 175, 55, 0.25);
+            border-color: rgba(212, 175, 55, 0.5);
+        }
+
+        .card-img-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+            background-color: #f1ede5;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+        }
+        .card:hover .card-img {
+            transform: scale(1.1);
+        }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(15, 20, 25, 0.95) 0%, rgba(20, 25, 30, 0.55) 60%, rgba(0, 0, 0, 0) 100%);
+            padding: 40px 24px 24px;
+            text-align: left;
+            z-index: 3;
+            transition: transform 0.35s ease;
+        }
+        .card:hover .card-overlay {
+            transform: translateY(-4px);
+        }
+
+        .card-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.85rem;
+            color: #fff;
+            margin: 0 0 6px 0;
+            font-weight: 600;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-type {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold-light);
+            font-weight: 500;
+        }
+
+        .badge {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            z-index: 4;
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+        }
+        .badge.video .badge-dot {
+            background: #e74c3c;
+        }
+
+        .card-view-btn {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        .card:hover .card-view-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .card-view-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #ffffff;
+        }
+
+        /* Lightbox Preview Modal */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 14, 20, 0.85);
+            backdrop-filter: blur(14px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background: #ffffff;
+            border-radius: 20px;
+            max-width: 680px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4), 0 0 40px rgba(212, 175, 55, 0.25);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            text-align: left;
+        }
+        .modal-backdrop.open .modal-box {
+            transform: translateY(0) scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+        .modal-close:hover {
+            background: var(--gold);
+            transform: rotate(90deg);
+        }
+        .modal-image-preview {
+            width: 100%;
+            height: 360px;
+            background-color: #1a1a1a;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .modal-body {
+            padding: 24px 28px;
+        }
+        .modal-event-type {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold-dark);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+        .modal-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+        .modal-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #d4af37, #9b7914);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+        }
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+        .modal-btn-secondary {
+            background: #f1f2f6;
+            color: var(--text-dark);
+        }
+        .modal-btn-secondary:hover {
+            background: #e4e7ed;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(34, 47, 62, 0.95);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            border: 1px solid var(--gold);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Empty state */
+        .no-results {
+            padding: 60px 20px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            color: var(--text-light);
+            display: none;
+        }
+
+        /* Footer */
+        .gallery-footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            color: var(--text-light);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        /* Keyframes */
+        @keyframes elegantLetterReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+        @keyframes continuousGoldShine {
+            0% { background-position: 100% 50%; }
+            50% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        @keyframes fadeInAmp {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.7; transform: scale(0.96); }
+            50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.8)); }
+        }
+
+        /* Mobile Adjustments for 2-cards per row */
+        @media (max-width: 768px) {
+            body { padding: 25px 8px 100px; }
+            .milestone-badge { font-size: 0.6rem; letter-spacing: 2px; padding: 4px 12px; }
+            h1 { font-size: 1.95rem; column-gap: 6px; }
+            .subtitle { font-size: 0.68rem; letter-spacing: 2.5px; }
+            .controls-wrapper { gap: 14px; margin-bottom: 25px; }
+            .search-container { max-width: 90%; }
+            .search-input { padding: 9px 16px 9px 36px; font-size: 0.78rem; }
+            .filters { gap: 6px; margin-bottom: 15px; }
+            .filter-btn { padding: 6px 12px; font-size: 0.7rem; }
+            .filter-btn .count-badge { padding: 1px 5px; font-size: 0.62rem; }
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding-bottom: 20px; }
+            .card { border-radius: 10px; }
+            .card-overlay { padding: 10px 8px; }
+            .card-title { font-size: 0.85rem; margin: 0 0 2px 0; }
+            .card-type { font-size: 0.5rem; letter-spacing: 1px; }
+            .badge { top: 6px; right: 6px; padding: 3px 7px; font-size: 0.5rem; letter-spacing: 0.5px; }
+            .card-view-btn { display: none; }
+            .audio-float-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 44px;
+                height: 44px;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18), 0 0 14px rgba(212, 175, 55, 0.4);
+            }
+            .audio-float-btn svg {
+                width: 20px;
+                height: 20px;
+            }
+            .modal-image-preview { height: 230px; }
+            .modal-title { font-size: 1.5rem; }
+            .modal-body { padding: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Indian Mandala Vectors in Background -->
+    <svg class="mandala-bg mandala-top-left" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+        <circle cx="50" cy="50" r="46" stroke="#d4af37" stroke-width="0.8"/>
+        <circle cx="50" cy="50" r="38" stroke="#d4af37" stroke-width="0.5" stroke-dasharray="2 2"/>
+        <circle cx="50" cy="50" r="28" stroke="#d4af37" stroke-width="0.7"/>
+        <circle cx="50" cy="50" r="16" stroke="#d4af37" stroke-width="0.5"/>
+        <path d="M50 4 L50 96 M4 50 L96 50 M17.5 17.5 L82.5 82.5 M17.5 82.5 L82.5 17.5" stroke="#d4af37" stroke-width="0.5"/>
+        <polygon points="50,10 62,38 90,50 62,62 50,90 38,62 10,50 38,38" stroke="#d4af37" stroke-width="0.6"/>
+        <polygon points="50,22 58,42 78,50 58,58 50,78 42,58 22,50 42,42" stroke="#d4af37" stroke-width="0.5"/>
+    </svg>
+
+    <svg class="mandala-bg mandala-bottom-right" viewBox="0 0 100 100" fill="none" stroke="currentColor">
+        <circle cx="50" cy="50" r="48" stroke="#d4af37" stroke-width="0.7"/>
+        <circle cx="50" cy="50" r="35" stroke="#d4af37" stroke-width="0.5" stroke-dasharray="3 2"/>
+        <polygon points="50,8 60,36 88,50 60,64 50,92 40,64 12,50 40,36" stroke="#d4af37" stroke-width="0.7"/>
+        <polygon points="50,20 57,43 80,50 57,57 50,80 43,57 20,50 43,43" stroke="#d4af37" stroke-width="0.5"/>
+    </svg>
+
+    <!-- Canvas for Floating Marigold/Rose Petals & Golden Starlight Dust -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Reliable YouTube Audio Player (Hidden valid 200x200 container) -->
+    <div style="position: fixed; bottom: 0; right: 0; width: 200px; height: 200px; opacity: 0.001; pointer-events: none; z-index: -1;">
+        <iframe 
+            id="yt-audio-frame"
+            width="200" 
+            height="200" 
+            src="https://www.youtube.com/embed/QgaTQ5-XfMM?enablejsapi=1&autoplay=1&loop=1&playlist=QgaTQ5-XfMM&playsinline=1" 
+            frameborder="0" 
+            allow="autoplay; encrypted-media">
+        </iframe>
+    </div>
+
+    <!-- Floating Circular Mute / Unmute Button -->
+    <button class="audio-float-btn playing" id="audio-toggle-btn" aria-label="Toggle Mute" title="Toggle Wedding Music">
+        <!-- Sound On (Unmuted) Icon -->
+        <svg id="sound-on-icon" viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+        </svg>
+        <!-- Sound Off (Muted) Icon -->
+        <svg id="sound-off-icon" viewBox="0 0 24 24" style="display: none;">
+            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+        </svg>
+    </button>
+
+    <!-- Main Content Container -->
+    <div class="main-container">
+        
+        <!-- Milestone Ribbon -->
+        <div class="milestone-badge">
+            <span class="spark">✦</span>
+            <span>A Royal Celebration • Forever &amp; Always</span>
+            <span class="spark">✦</span>
+        </div>
+
+        <div class="header-section">
+            <h1 id="animated-title" aria-label="Swagat &amp; Damini">
+                <span class="name-part" id="name-swagat"></span>
+                <span class="ampersand">&amp;</span>
+                <span class="name-part" id="name-damini"></span>
+            </h1>
+            <div class="gold-ornament">
+                <span class="gold-line"></span>
+                <span class="gold-diamond">✦</span>
+                <span class="gold-line"></span>
+            </div>
+            <div class="subtitle">A Journey of Love • Wedding Memories</div>
+        </div>
+
+        <!-- Controls: Search & Category Counters -->
+        <div class="controls-wrapper">
+            <div class="search-container">
+                <svg class="search-icon" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" id="gallery-search" class="search-input" placeholder="Search event photos, films, haldi..." autocomplete="off">
+            </div>
+
+            <div class="filters" id="filters-container">
+                <button class="filter-btn active" data-filter="all">
+                    <span>All Events</span>
+                    <span class="count-badge" id="count-all">15</span>
+                </button>
+                <button class="filter-btn" data-filter="engagement">
+                    <span>Engagement</span>
+                    <span class="count-badge" id="count-engagement">4</span>
+                </button>
+                <button class="filter-btn" data-filter="haldi">
+                    <span>Haldi &amp; Mehndi</span>
+                    <span class="count-badge" id="count-haldi">5</span>
+                </button>
+                <button class="filter-btn" data-filter="wedding">
+                    <span>Wedding &amp; Reception</span>
+                    <span class="count-badge" id="count-wedding">6</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Card Grid -->
+        <div class="grid" id="gallery-grid"></div>
+        <div class="no-results" id="no-results">No memorable moments found matching your search.</div>
+
+        <!-- Royal Footer -->
+        <footer class="gallery-footer">
+            <p>Created with Love &amp; Warmth for Swagat &amp; Damini</p>
+        </footer>
+    </div>
+
+    <!-- Quick Preview / Lightbox Modal -->
+    <div class="modal-backdrop" id="preview-modal">
+        <div class="modal-box">
+            <button class="modal-close" id="modal-close-btn" aria-label="Close modal">&times;</button>
+            <div class="modal-image-preview" id="modal-preview-img"></div>
+            <div class="modal-body">
+                <div class="modal-event-type" id="modal-event-type">Category</div>
+                <h2 class="modal-title" id="modal-title">Event Title</h2>
+                <div class="modal-actions">
+                    <a href="#" target="_blank" class="modal-btn modal-btn-primary" id="modal-open-link">
+                        <span id="modal-action-text">Open Full Gallery</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                    </a>
+                    <button class="modal-btn modal-btn-secondary" id="modal-share-btn">
+                        <span>Share Link</span>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast-msg">Link copied to clipboard!</div>
+
+    <script>
+        /* --- 1. Data Source (All Original 15 Items Retained) --- */
+        const links = [
+            { title: 'Engagement Photos', type: 'Photos', category: 'engagement', url: 'https://sshuttercraftstudios6.pixieset.com/swagatanddamini/', img: 'https://drive.google.com/thumbnail?id=1zRdOMohjVAryT7Un_EjUjymkgp-hI5AR&sz=w1000' },
+            { title: 'Engagement Trailer', type: 'Video', category: 'engagement', url: 'https://youtu.be/66ULXmsm7Bw', img: 'https://drive.google.com/thumbnail?id=1UX145zuKoBhYPxiwqW8nCLYR4ruksCvJ&sz=w1000' },
+            { title: 'Engagement Full', type: 'Video', category: 'engagement', url: 'https://youtu.be/X-HpMzKFZtM', img: 'https://drive.google.com/thumbnail?id=1OhFoYypImFvigIawtQCgdkyFImABwjf4&sz=w1000' },
+            { title: 'Pre-Wedding', type: 'Photos', category: 'engagement', url: 'https://sshuttercraftstudios6.pixieset.com/swagatanddamini/', img: 'https://drive.google.com/thumbnail?id=1Xc3I6arsZ4OGr3w98KO4ORJrEC8c8sZf&sz=w1000' },
+            
+            { title: 'Mehndi', type: 'Photos', category: 'haldi', url: 'https://sshuttercraftstudios9.pixieset.com/mehendi/', img: 'https://drive.google.com/thumbnail?id=1ksNgZVaH_VLiyFSw0y3BamVJ_vAnY6DJ&sz=w1000' },
+            { title: 'Swagat Haldi', type: 'Photos', category: 'haldi', url: 'https://sshuttercraftstudios3882.pixieset.com/swagathaldi/', img: 'https://drive.google.com/thumbnail?id=1rryQns_Ry2syhFZH94l9jGRvWwRAyw4N&sz=w1000' },
+            { title: 'Swagat Haldi Film', type: 'Video', category: 'haldi', url: 'https://drive.google.com/file/d/1wKEaYMCgczLppGKI-0t6sE-DH93xiW3q/view?usp=drive_link', img: 'https://drive.google.com/thumbnail?id=1D_ASpOJd8fN4mqmf7n07XiV1uuT8Td3z&sz=w1000' },
+            { title: 'Damini Haldi', type: 'Photos', category: 'haldi', url: 'https://sshuttercraftstudios74.pixieset.com/daminishaldi/', img: 'https://drive.google.com/thumbnail?id=1lu0rlec3lOdJyTR2db6nrHho_LiMzGlA&sz=w1000' },
+            { title: 'Damini Haldi Film', type: 'Video', category: 'haldi', url: 'https://drive.google.com/file/d/1wwAS-krbZmaTrLjlWG3lMVt7pRz_xqxZ/view?usp=drive_link', img: 'https://drive.google.com/thumbnail?id=1DkNAKXBnlo3RVL2mRCca5mFEx2lAT6Zw&sz=w1000' },
+            
+            { title: 'Swagat & Damini 1', type: 'Photos', category: 'wedding', url: 'https://sshutercraftstudios.pixieset.com/swagatanddamini/', img: 'https://drive.google.com/thumbnail?id=1FPWXiTN0fQSzs6RMcuVS_r8a1XHDfSa-&sz=w1000' },
+            { title: 'Swagat & Damini 2', type: 'Photos', category: 'wedding', url: 'https://sshuttercraftstudios70.pixieset.com/swagatanddamini/', img: 'https://drive.google.com/thumbnail?id=1uVyuGZ8ET7vMjtO2ZYZVnlv7iNjHqRpD&sz=w1000' },
+            { title: 'Family Portraits', type: 'Photos', category: 'wedding', url: 'https://sshuttercraftstudios79.pixieset.com/family/', img: 'https://drive.google.com/thumbnail?id=1gztES31FRQUTMCqa0mF1nduoqEktkkfJ&sz=w1000' },
+            { title: 'Traditional', type: 'Photos', category: 'wedding', url: 'https://sshuttercraftstudios3.pixieset.com/traditional/', img: 'https://drive.google.com/thumbnail?id=1WaSk33lJBVp_liubJRmDsjGG5nF5G2wX&sz=w1000' },
+            { title: 'Wedding Film', type: 'Video', category: 'wedding', url: 'https://drive.google.com/file/d/1o-QrDvTONnZZrsmYwxiuKgHAiyasoqCb/view?usp=drive_link', img: 'https://drive.google.com/thumbnail?id=1PHwGKnzxI5E4bF9uTY7eB6I1CUaY2JIj&sz=w1000' },
+            { title: 'Reception Film', type: 'Video', category: 'wedding', url: 'https://drive.google.com/file/d/1gozVn--ouh_yC2bfUmeJTpKzmiUZairq/view?usp=drive_link', img: 'https://drive.google.com/thumbnail?id=1VMAzTFNZEuWsmeTJgl20qW8_NUvypAbp&sz=w1000' }
+        ];
+
+        /* --- 2. Title Stagger Animation --- */
+        function animateName(elementId, text, startDelay = 0.05) {
+            const container = document.getElementById(elementId);
+            container.innerHTML = '';
+            text.split('').forEach((char, idx) => {
+                const span = document.createElement('span');
+                span.className = 'animated-char';
+                span.textContent = char;
+                span.style.animationDelay = `${startDelay + idx * 0.07}s, ${startDelay + idx * 0.07}s`;
+                container.appendChild(span);
+            });
+        }
+        animateName('name-swagat', 'Swagat', 0.1);
+        animateName('name-damini', 'Damini', 0.65);
+
+        /* --- 3. Dynamic Counts Calculation --- */
+        function updateCounts() {
+            document.getElementById('count-all').textContent = links.length;
+            document.getElementById('count-engagement').textContent = links.filter(l => l.category === 'engagement').length;
+            document.getElementById('count-haldi').textContent = links.filter(l => l.category === 'haldi').length;
+            document.getElementById('count-wedding').textContent = links.filter(l => l.category === 'wedding').length;
+        }
+        updateCounts();
+
+        /* --- 4. Render Gallery Cards with 3D Tilt & Specular Light --- */
+        const grid = document.getElementById('gallery-grid');
+        const noResults = document.getElementById('no-results');
+        let currentFilter = 'all';
+        let currentSearchQuery = '';
+
+        function renderCards() {
+            grid.innerHTML = '';
+            
+            const filtered = links.filter(link => {
+                const matchesFilter = currentFilter === 'all' || link.category === currentFilter;
+                const matchesSearch = link.title.toLowerCase().includes(currentSearchQuery) || 
+                                      link.type.toLowerCase().includes(currentSearchQuery) ||
+                                      link.category.toLowerCase().includes(currentSearchQuery);
+                return matchesFilter && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+
+            filtered.forEach((link, index) => {
+                const cardWrapper = document.createElement('div');
+                cardWrapper.className = 'card-wrapper';
+                cardWrapper.style.animationDelay = `${Math.min(index * 0.04, 0.4)}s`;
+
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                const displayCategory = link.category === 'haldi' ? 'Haldi & Mehndi' 
+                                      : link.category === 'wedding' ? 'Wedding & Reception' 
+                                      : 'Engagement';
+
+                const isVideo = link.type.toLowerCase() === 'video';
+
+                card.innerHTML = `
+                    <div class="badge ${isVideo ? 'video' : ''}">
+                        <span class="badge-dot"></span>
+                        <span>${link.type}</span>
+                    </div>
+                    <button class="card-view-btn" title="Quick View" aria-label="Quick View">
+                        <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    </button>
+                    <div class="card-img-container">
+                        <div class="card-img" style="background-image: url('${link.img}')"></div>
+                    </div>
+                    <div class="card-overlay">
+                        <div class="card-type">${displayCategory}</div>
+                        <h3 class="card-title">${link.title}</h3>
+                    </div>
+                `;
+
+                card.addEventListener('click', (e) => {
+                    openModal(link);
+                });
+
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = ((y - centerY) / centerY) * -8;
+                    const rotateY = ((x - centerX) / centerX) * 8;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-8px)`;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+                });
+
+                cardWrapper.appendChild(card);
+                grid.appendChild(cardWrapper);
+            });
+        }
+
+        renderCards();
+
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.getAttribute('data-filter');
+                renderCards();
+            });
+        });
+
+        const searchInput = document.getElementById('gallery-search');
+        searchInput.addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value.trim().toLowerCase();
+            renderCards();
+        });
+
+        /* --- 5. Royal Lightbox Modal --- */
+        const modal = document.getElementById('preview-modal');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalImg = document.getElementById('modal-preview-img');
+        const modalTitle = document.getElementById('modal-title');
+        const modalType = document.getElementById('modal-event-type');
+        const modalOpenLink = document.getElementById('modal-open-link');
+        const modalActionText = document.getElementById('modal-action-text');
+        const modalShareBtn = document.getElementById('modal-share-btn');
+        const toast = document.getElementById('toast-msg');
+        let currentModalLink = null;
+
+        function openModal(link) {
+            currentModalLink = link;
+            modalImg.style.backgroundImage = `url('${link.img}')`;
+            modalTitle.textContent = link.title;
+            const categoryName = link.category === 'haldi' ? 'Haldi & Mehndi' 
+                               : link.category === 'wedding' ? 'Wedding & Reception' 
+                               : 'Engagement';
+            modalType.textContent = `${categoryName} • ${link.type}`;
+            modalOpenLink.href = link.url;
+            modalActionText.textContent = link.type === 'Video' ? 'Watch Video Film' : 'View Full Album';
+            modal.classList.add('open');
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('open')) {
+                closeModal();
+            }
+        });
+
+        function showToast(text) {
+            toast.textContent = text;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        modalShareBtn.addEventListener('click', () => {
+            if (!currentModalLink) return;
+            const shareText = `Explore "${currentModalLink.title}" from Swagat & Damini's Wedding: ${currentModalLink.url}`;
+            
+            const tempInput = document.createElement('textarea');
+            tempInput.value = shareText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                showToast('Gallery link copied to clipboard!');
+            } catch (err) {
+                showToast('Could not copy link.');
+            }
+            document.body.removeChild(tempInput);
+        });
+
+        /* --- 6. Reliable YouTube Background Audio Controller --- */
+        const ytFrame = document.getElementById('yt-audio-frame');
+        const audioBtn = document.getElementById('audio-toggle-btn');
+        const soundOnIcon = document.getElementById('sound-on-icon');
+        const soundOffIcon = document.getElementById('sound-off-icon');
+        let isPlaying = false;
+
+        function postYTCmd(func, args) {
+            if (!ytFrame || !ytFrame.contentWindow) return;
+            ytFrame.contentWindow.postMessage(JSON.stringify({
+                event: 'command',
+                func: func,
+                args: args || []
+            }), '*');
+        }
+
+        function updateAudioUI(playing) {
+            isPlaying = playing;
+            if (playing) {
+                soundOnIcon.style.display = 'block';
+                soundOffIcon.style.display = 'none';
+                audioBtn.classList.add('playing');
+                audioBtn.setAttribute('title', 'Mute Music');
+            } else {
+                soundOnIcon.style.display = 'none';
+                soundOffIcon.style.display = 'block';
+                audioBtn.classList.remove('playing');
+                audioBtn.setAttribute('title', 'Play Music');
+            }
+        }
+
+        function startMusic() {
+            if (!isPlaying) {
+                postYTCmd('unMute');
+                postYTCmd('playVideo');
+                updateAudioUI(true);
+            }
+        }
+
+        // Tap/click button toggles play/mute
+        audioBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isPlaying) {
+                postYTCmd('mute');
+                postYTCmd('pauseVideo');
+                updateAudioUI(false);
+                showToast('Music paused');
+            } else {
+                startMusic();
+                showToast('Music playing');
+            }
+        });
+
+        // First user gesture anywhere on the page guarantees audio starts immediately
+        const unlockAudio = () => {
+            startMusic();
+            window.removeEventListener('click', unlockAudio);
+            window.removeEventListener('touchstart', unlockAudio);
+            window.removeEventListener('scroll', unlockAudio);
+        };
+        window.addEventListener('click', unlockAudio, { passive: true });
+        window.addEventListener('touchstart', unlockAudio, { passive: true });
+        window.addEventListener('scroll', unlockAudio, { passive: true });
+
+        /* --- 7. Live Physics Petals, Golden Stars & Sparkle Canvas --- */
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const particles = [];
+        const interactiveSparkles = [];
+
+        class RoyalParticle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = -20 - Math.random() * 50;
+                this.type = Math.random() > 0.65 ? 'petal' : 'goldDust';
+                
+                if (this.type === 'petal') {
+                    this.petalColor = Math.random() > 0.4 ? 'marigold' : 'rose';
+                    this.size = Math.random() * 6 + 6;
+                    this.speedY = Math.random() * 0.8 + 0.6;
+                    this.speedX = Math.random() * 0.9 - 0.45;
+                    this.oscillationSpeed = Math.random() * 0.02 + 0.01;
+                    this.angle = Math.random() * Math.PI * 2;
+                    this.angleSpeed = (Math.random() - 0.5) * 0.03;
+                    this.opacity = Math.random() * 0.65 + 0.35;
+                } else {
+                    this.size = Math.random() * 2.5 + 0.8;
+                    this.speedY = Math.random() * 0.5 + 0.2;
+                    this.speedX = (Math.random() - 0.5) * 0.4;
+                    this.opacity = Math.random() * 0.7 + 0.2;
+                    this.isStar = Math.random() > 0.4;
+                    this.angle = Math.random() * Math.PI;
+                    this.angleSpeed = (Math.random() - 0.5) * 0.04;
+                }
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.angle += this.angleSpeed;
+
+                if (this.type === 'petal') {
+                    this.x += Math.sin(this.y * this.oscillationSpeed) * 0.6;
+                }
+
+                if (this.y > height + 25 || this.x < -30 || this.x > width + 30) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                ctx.globalAlpha = this.opacity;
+
+                if (this.type === 'petal') {
+                    ctx.fillStyle = this.petalColor === 'marigold' ? '#e58e26' : '#b71540';
+                    ctx.beginPath();
+                    ctx.ellipse(0, 0, this.size, this.size * 0.5, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (this.isStar) {
+                    ctx.fillStyle = '#f9f0cb';
+                    ctx.beginPath();
+                    for (let i = 0; i < 4; i++) {
+                        ctx.lineTo(Math.cos((i * Math.PI) / 2) * (this.size * 2), Math.sin((i * Math.PI) / 2) * (this.size * 2));
+                        ctx.lineTo(Math.cos((i * Math.PI) / 2 + Math.PI / 4) * (this.size * 0.4), Math.sin((i * Math.PI) / 2 + Math.PI / 4) * (this.size * 0.4));
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                } else {
+                    const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 2.2);
+                    grad.addColorStop(0, 'rgba(255, 240, 180, 0.9)');
+                    grad.addColorStop(0.5, 'rgba(212, 175, 55, 0.5)');
+                    grad.addColorStop(1, 'rgba(212, 175, 55, 0)');
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size * 2.2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.restore();
+            }
+        }
+
+        class CursorSparkle {
+            constructor(x, y, isBurst = false) {
+                this.x = x;
+                this.y = y;
+                const speedMult = isBurst ? 3.5 : 1.2;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * speedMult + 0.4;
+                this.speedX = Math.cos(angle) * speed;
+                this.speedY = Math.sin(angle) * speed - (isBurst ? 0.8 : 0);
+                this.size = Math.random() * (isBurst ? 3.5 : 2) + 1;
+                this.opacity = 1;
+                this.decay = isBurst ? 0.025 : 0.035;
+                this.rotation = Math.random() * Math.PI;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity -= this.decay;
+                this.rotation += 0.04;
+            }
+            draw() {
+                if (this.opacity <= 0) return;
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = Math.max(0, this.opacity);
+                ctx.fillStyle = '#f9f0cb';
+
+                ctx.beginPath();
+                ctx.moveTo(0, -this.size * 2);
+                ctx.lineTo(this.size * 0.6, 0);
+                ctx.lineTo(0, this.size * 2);
+                ctx.lineTo(-this.size * 0.6, 0);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 36; i++) {
+            const p = new RoyalParticle();
+            p.y = Math.random() * height;
+            particles.push(p);
+        }
+
+        window.addEventListener('pointermove', (e) => {
+            if (interactiveSparkles.length < 40 && Math.random() > 0.45) {
+                interactiveSparkles.push(new CursorSparkle(e.clientX, e.clientY));
+            }
+        });
+
+        window.addEventListener('pointerdown', (e) => {
+            for (let i = 0; i < 8; i++) {
+                interactiveSparkles.push(new CursorSparkle(e.clientX, e.clientY, true));
+            }
+        });
+
+        function animateLoop() {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+
+            for (let i = interactiveSparkles.length - 1; i >= 0; i--) {
+                const sp = interactiveSparkles[i];
+                sp.update();
+                sp.draw();
+                if (sp.opacity <= 0) {
+                    interactiveSparkles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animateLoop);
+        }
+        animateLoop();
+    </script>
+</body>
+</html>
