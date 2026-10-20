@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Swagat & Damini Wedding Gallery</title>
+    <title>Swagat &amp; Damini Wedding Gallery</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -650,7 +650,6 @@
             opacity: 1;
         }
 
-        /* Empty state */
         .no-results {
             padding: 60px 20px;
             font-family: 'Cormorant Garamond', serif;
@@ -659,7 +658,6 @@
             display: none;
         }
 
-        /* Footer */
         .gallery-footer {
             margin-top: 60px;
             padding-top: 30px;
@@ -711,7 +709,7 @@
             50% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.8)); }
         }
 
-        /* Mobile Adjustments for 2-cards per row */
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
             body { padding: 25px 8px 100px; }
             .milestone-badge { font-size: 0.6rem; letter-spacing: 2px; padding: 4px 12px; }
@@ -770,17 +768,10 @@
     <!-- Canvas for Floating Marigold/Rose Petals & Golden Starlight Dust -->
     <canvas id="particle-canvas"></canvas>
 
-    <!-- Reliable YouTube Audio Player (Hidden valid 200x200 container) -->
-    <div style="position: fixed; bottom: 0; right: 0; width: 200px; height: 200px; opacity: 0.001; pointer-events: none; z-index: -1;">
-        <iframe 
-            id="yt-audio-frame"
-            width="200" 
-            height="200" 
-            src="https://www.youtube.com/embed/QgaTQ5-XfMM?enablejsapi=1&autoplay=1&loop=1&playlist=QgaTQ5-XfMM&playsinline=1" 
-            frameborder="0" 
-            allow="autoplay; encrypted-media">
-        </iframe>
-    </div>
+    <!-- Native Direct HTML5 Audio Player (Local GitHub File) -->
+    <audio id="wedding-audio" loop preload="auto">
+        <source src="Song.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- Floating Circular Mute / Unmute Button -->
     <button class="audio-float-btn playing" id="audio-toggle-btn" aria-label="Toggle Mute" title="Toggle Wedding Music">
@@ -1092,25 +1083,16 @@
             document.body.removeChild(tempInput);
         });
 
-        /* --- 6. Reliable YouTube Background Audio Controller --- */
-        const ytFrame = document.getElementById('yt-audio-frame');
+        /* --- 6. Direct MP3 Background Audio Controller (Song.mp3) --- */
+        const audio = document.getElementById('wedding-audio');
         const audioBtn = document.getElementById('audio-toggle-btn');
         const soundOnIcon = document.getElementById('sound-on-icon');
         const soundOffIcon = document.getElementById('sound-off-icon');
-        let isPlaying = false;
 
-        function postYTCmd(func, args) {
-            if (!ytFrame || !ytFrame.contentWindow) return;
-            ytFrame.contentWindow.postMessage(JSON.stringify({
-                event: 'command',
-                func: func,
-                args: args || []
-            }), '*');
-        }
+        audio.volume = 0.85;
 
-        function updateAudioUI(playing) {
-            isPlaying = playing;
-            if (playing) {
+        function updateAudioUI(isPlaying) {
+            if (isPlaying) {
                 soundOnIcon.style.display = 'block';
                 soundOffIcon.style.display = 'none';
                 audioBtn.classList.add('playing');
@@ -1123,31 +1105,26 @@
             }
         }
 
-        function startMusic() {
-            if (!isPlaying) {
-                postYTCmd('unMute');
-                postYTCmd('playVideo');
+        function playAudio() {
+            audio.play().then(() => {
                 updateAudioUI(true);
-            }
+            }).catch(() => {
+                // Browser blocked unprompted autoplay - wait for first touch/click
+                updateAudioUI(false);
+            });
         }
 
-        // Tap/click button toggles play/mute
-        audioBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (isPlaying) {
-                postYTCmd('mute');
-                postYTCmd('pauseVideo');
-                updateAudioUI(false);
-                showToast('Music paused');
-            } else {
-                startMusic();
-                showToast('Music playing');
-            }
+        // Try to play immediately when loaded
+        window.addEventListener('DOMContentLoaded', playAudio);
+        window.addEventListener('load', () => {
+            if (audio.paused) playAudio();
         });
 
-        // First user gesture anywhere on the page guarantees audio starts immediately
+        // Guaranteed unlock on first click, tap, or scroll anywhere on the screen
         const unlockAudio = () => {
-            startMusic();
+            if (audio.paused) {
+                playAudio();
+            }
             window.removeEventListener('click', unlockAudio);
             window.removeEventListener('touchstart', unlockAudio);
             window.removeEventListener('scroll', unlockAudio);
@@ -1155,6 +1132,27 @@
         window.addEventListener('click', unlockAudio, { passive: true });
         window.addEventListener('touchstart', unlockAudio, { passive: true });
         window.addEventListener('scroll', unlockAudio, { passive: true });
+
+        // Floating circular button toggles play/pause
+        audioBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (audio.paused) {
+                audio.play().then(() => {
+                    updateAudioUI(true);
+                    showToast('Music playing');
+                }).catch(() => {});
+            } else {
+                audio.pause();
+                updateAudioUI(false);
+                showToast('Music paused');
+            }
+        });
+
+        // Ensure seamless looping
+        audio.addEventListener('ended', () => {
+            audio.currentTime = 0;
+            audio.play();
+        });
 
         /* --- 7. Live Physics Petals, Golden Stars & Sparkle Canvas --- */
         const canvas = document.getElementById('particle-canvas');
@@ -1170,6 +1168,7 @@
         const particles = [];
         const interactiveSparkles = [];
 
+        // Rose/Marigold petals + Golden starlight dust
         class RoyalParticle {
             constructor() {
                 this.reset();
